@@ -46,7 +46,9 @@ class NaiveBayes:
             Dict[int, torch.Tensor]: A dictionary mapping class labels to their estimated prior probabilities.
         """
         # TODO: Count number of samples for each output class and divide by total of samples
-        output_classes_counts = torch.bincount(labels)  
+        
+        labels = labels.long()  # Cast labels to long (integer)
+        output_classes_counts: torch.Tensor = torch.bincount(labels)
         total_samples = labels.shape[0]
 
         class_priors = {i: output_classes_counts[i].float() / total_samples for i in range(len(output_classes_counts))}
@@ -78,7 +80,7 @@ class NaiveBayes:
             # Mask for the current class
             mask = (labels == c)
             class_features = features[mask] 
-            
+
             word_counts = torch.sum(class_features, dim=0) 
             total_words = torch.sum(word_counts)
 

@@ -30,9 +30,9 @@ def read_sentiment_examples(infile: str) -> List[SentimentExample]:
                 continue
 
             # Divide into sentence and label and skip wrong format lines
-            line_div = line.rsplit("\t")
+            line_div = line.rsplit("\t", 1)
 
-            if len(line_div) < 2:
+            if len(line_div) != 2:
                 continue  
 
             sentence, label = line_div
