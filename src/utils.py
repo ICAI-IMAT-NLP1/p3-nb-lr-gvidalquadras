@@ -92,4 +92,24 @@ def evaluate_classification(predictions: torch.Tensor, labels: torch.Tensor) -> 
     """
     metrics: Dict[str, float] = None
 
+    # Calculate confusion matrix items
+    true_positive = torch.sum((predictions == 1) & (labels == 1)).item()  # TP
+    false_positive = torch.sum((predictions == 1) & (labels == 0)).item()  # FP
+    true_negative = torch.sum((predictions == 0) & (labels == 0)).item()  # TN
+    false_negative = torch.sum((predictions == 0) & (labels == 1)).item()  # FN
+    
+
+    # Calculate metrics
+    accuracy = (true_positive + true_negative) / len(labels)
+    precision = true_positive / (true_positive + false_positive) if (true_positive + false_positive) > 0 else 0.0
+    recall = true_positive / (true_positive + false_negative) if (true_positive + false_negative) > 0 else 0.0
+    f1_score = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0.0
+    
+    metrics: Dict[str, float] = {
+        'accuracy': accuracy,
+        'precision': precision,
+        'recall': recall,
+        'f1_score': f1_score
+    }
+    
     return metrics
